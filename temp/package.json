@@ -1,0 +1,23 @@
+{
+  "name": "homework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "https://github.com/won-joon/temp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/won-joon/temp.git"
+  },
+  "author": "wonJoon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/won-joon/temp/issues"
+  },
+  "homepage": "https://github.com/won-joon/temp#readme",
+  "dependencies": {
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  }
+}
