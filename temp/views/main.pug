@@ -1,0 +1,27 @@
+doctype
+html
+  head
+    meta(charset='UTF-8')
+    title= title
+    link(rel='stylesheet' href='/main.css')
+  body
+    .container
+      div
+        h1 아이디 로그인 구현
+      .profile-wrap
+        .profile
+          if user && user.id
+            .user-name= '안녕하세요! ' + user.nick + '님'
+            a#logout.btn(href='/auth/logout') 로그아웃
+          else
+            form#login-form(action='/auth/login' method='post')
+              .input-group
+                label(for='nick') 아이디
+                input#email(type='text' name='nick' required autofocus)
+              .input-group
+                label(for='password') 비밀번호
+                input#password(type='password' name='password' required)
+              if loginError
+                .error-message= loginError
+              a#join.btn(href='/join') 회원가입
+              button#login.btn(type='submit') 로그인
