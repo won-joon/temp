@@ -25,3 +25,19 @@ html
                 .error-message= loginError
               a#join.btn(href='/join') 회원가입
               button#login.btn(type='submit') 로그인
+        .timeline
+          if user
+            div
+              form#twit-form(action='/post' method='post')
+                .input-group
+                  textarea#twit(name='content' maxlength=140)
+                div
+                  button#twit-btn.btn(type='submit') 확인
+              .twits
+          for twit in twits
+            .twit
+              input.twit-user-id(type='hidden' value=twit.user.id)
+              .twit-author= twit.user.nick
+              .twit-content= twit.content
+              if user && user.id === twit.user.id
+                button.delete 게시글 삭제
