@@ -12,6 +12,7 @@ html
         .profile
           if user && user.id
             .user-name= '안녕하세요! ' + user.nick + '님'
+            input#my-id(type='hidden' value=user.id)
             a#logout.btn(href='/auth/logout') 로그아웃
           else
             form#login-form(action='/auth/login' method='post')
@@ -33,11 +34,55 @@ html
                   textarea#twit(name='content' maxlength=140)
                 div
                   button#twit-btn.btn(type='submit') 확인
-              .twits
           for twit in twits
             .twit
               input.twit-user-id(type='hidden' value=twit.user.id)
+              input.twit-id(type='hidden' value=twit.id)
               .twit-author= twit.user.nick
               .twit-content= twit.content
               if user && user.id === twit.user.id
                 button.delete 게시글 삭제
+              if user && user.id === twit.user.id
+                button.update(type='submit') 게시글 수정
+
+        script.
+          [].forEach.call(document.querySelectorAll('.delete'), function (tag) {
+            tag.addEventListener('click', function () {
+              var isLoggedIn = document.querySelector('#my-id');
+              var twitId = tag.parentNode.querySelector('.twit-id').value; // 게시글의 번호
+              if (isLoggedIn) {
+                var userId = tag.parentNode.querySelector('.twit-user-id').value; // 게시글을 올린 사용자id
+                var myId = isLoggedIn.value;
+                  if (userId === myId) {
+                    if (confirm('게시글을 삭제하시겠습니까?')) {
+                      var xhr = new XMLHttpRequest();
+                      xhr.onload = function () {
+                        if (xhr.status === 200) {
+                          location.reload();
+                        } else {
+                          console.error(xhr.responseText);
+                        }
+                      };
+                      xhr.open('DELETE', '/post/' + twitId);
+                      xhr.send();
+                    }
+                  }
+              }
+            });
+          });
+
+          [].forEach.call(document.querySelectorAll('.update'), function (tag) {
+            tag.addEventListener('click', function () {
+              var isLoggedIn = document.querySelector('#my-id');
+              var twitId = tag.parentNode.querySelector('.twit-id').value; // 게시글의 번호
+              if (isLoggedIn) {
+                var userId = tag.parentNode.querySelector('.twit-user-id').value; // 게시글을 올린 사용자id
+                var myId = isLoggedIn.value;
+                  if (userId === myId && tag.parentNode.lastChild.nodeName != "DIV") {
+                    var p = document.createElement('div');
+                    p.innerHTML = "<form id='update-form' action='/post/update' method='post'><textarea id='temp' name='temp'></textarea>"+"<input type='hidden' name='postId' value="+twitId+">"+"<button class='btn' type='submit'>확인</button></form>";
+                    tag.parentNode.appendChild(p);
+                  }
+              }
+            });
+          });
